@@ -1,0 +1,25 @@
+#%RAML 1.0 Library
+usage: account
+types:
+  createaccount:
+    type: object
+    properties:
+      id?: string
+      firstName: string
+      lastName: string
+      address: string
+      postal: string
+      country: string
+      miles: integer
+      creationDate?: datetime
+      type: string
+  creationresponsetype:
+    type: object
+    properties:
+      firstName: string
+      lastName: string
+      address: string
+      postal: string
+      country: string
+      miles: integer
+      type: string

@@ -1,0 +1,122 @@
+#%RAML 1.0
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/e1f0bd70-471c-476e-853b-d670ddb71462/ # 
+title: AccountsAPI
+
+uses:
+  account: DataType/accounts.raml
+
+/accounts:
+  get:
+    description: retriving Account
+    headers:
+      Requester-ID:
+        required: true
+      
+    queryParameters: 
+      type:
+        required: true
+        type: string
+        enum:
+          - personal
+          - business
+      name:
+        required: false
+        type: string
+      country:
+        required: false
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            type: account.createaccount[]
+            example: !include /Example/example.raml
+      400:
+        body:
+          application/json:
+            example:
+              {"message":"error retriving the account"}
+
+  post:
+    description: Creating or Updating ACCount
+    headers:
+      Requester-ID:
+        required: true
+    body:
+      application/json:
+        type: account.creationresponsetype
+        example: !include Example/noidorcreationdare.raml
+
+    responses:
+      201:
+        body:
+          application/json:
+            example:
+              {"message":"Account created (but not really)"}
+      400:
+        body:
+          application/json:
+            example:
+              {"message":"error creating the account"}
+  /{id}:
+    get:
+      description: this method retrives the account
+      queryParameters:
+        type:
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              type: account.createaccount
+              example: !include /Example/sample.raml
+        400:
+          body:
+            application/json:
+              example:
+                {"message": "not valid request"}
+          
+
+    put:
+      description: it will update the account
+      responses:
+        200:
+          body:
+            application/json:
+              example:
+                {"message": "account replaced (but not really)"}
+        400:
+          body:
+            application/json:
+              example:
+                {"message": "error replacing the account"}
+                
+      
+    patch:
+      description: this method modifiy the account
+      responses:
+        200:
+          body:
+            application/json:
+              example:
+                {"message": "account modified (but not really)"}
+        400:
+          body:
+            application/json:
+              example:
+                 {"message": "error coludn't modifying "}
+                
+    delete:
+      description: this method delete a single ID
+      responses:
+        200:
+          body:
+            application/json:
+              example:
+                {"message": "account deleted (but not really)"} 
+        400:
+          body:
+            application/json:
+              example:
+                {"message": "error deleting the account"} 
+                

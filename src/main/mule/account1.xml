@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="5067d848-d14e-47dc-92d8-bc8c113c34e9" >
+		<db:my-sql-connection host="mudb.learn.mulesoft.com" port="3306" user="mule" password="mule" database="training" />
+	</db:config>
+	<flow name="account1Flow" doc:id="a620c098-0990-40f4-b0b3-89d39bf70f9d" >
+		<db:select doc:name="Select" doc:id="7416674f-dba8-4bea-907c-a86708799a43" config-ref="Database_Config">
+			<db:sql >select * from flights_customers where accountType =  :type</db:sql>
+			<db:input-parameters ><![CDATA[#[{"type": attributes.queryParams['type']}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="050fe0be-7b9f-47a9-a221-8dd4600830fe" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (( payload01 , indexOfPayload01 ) -> {
+	id: payload01.accountID,
+	firstName:(payload01.name splitBy ' ')[0],
+	lastName:(payload01.name splitBy ' ')[1],
+	address: payload01.street ++ ", " ++ (payload01.city),
+	postal: payload01.postal,
+	country: payload01.country,
+	accountType: payload01.accountType,
+	miles: payload01.miles
+}
+)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="account1Flow1" doc:id="ea0e579b-34f7-413f-83f6-12507d059a19" >
+		<db:select doc:name="Select" doc:id="adf87f70-ed46-4300-9b5d-1b44f90f32e6" config-ref="Database_Config">
+			<db:sql >select * from flights_accounts where accountID = :id</db:sql>
+			<db:input-parameters ><![CDATA[#[{"id": attributes.uriParams.id}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="c9181378-842e-4812-a0e0-821e8c509ed5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

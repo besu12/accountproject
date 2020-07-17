@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="outputformapping" format="json">
+      <types:shape format="weave" example="examples/output.json.txt"><![CDATA[%dw 2.0
+
+type outputformapping = Array<{|  id: String,   firstName: String,   lastName: String,   address: String,   postal: String,   country: String,   creationDate: String,   accountType: String,   miles: Number {"typeId": "int"}|}> {"example": "[{\\\"id\\\":\\\"100\\\",\\\"firstName\\\":\\\"Ali\\\",\\\"lastName\\\":\\\"Woodland\\\",\\\"address\\\":\\\"89 Nibm Road, Las Vegas\\\",\\\"postal\\\":\\\"59141\\\",\\\"country\\\":\\\"USA\\\",\\\"creationDate\\\":\\\"2017-08-22T19:52:42\\\",\\\"accountType\\\":\\\"personal\\\",\\\"miles\\\":36470}]"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="input" format="json">
+      <types:shape format="weave" example="examples/input-1.txt"><![CDATA[%dw 2.0
+
+type input = {|
+  accountID: String, 
+  country: String, 
+  creationDate: String, 
+  city: String, 
+  street: String, 
+  name: String, 
+  accountType: String, 
+  state: String, 
+  postal: String, 
+  miles: Number {"typeId": "int"}
+|} {"example": "{\\\"accountID\\\":\\\"4401\\\",\\\"country\\\":\\\"India\\\",\\\"creationDate\\\":\\\"2017-08-22T19:52:42\\\",\\\"city\\\":\\\"Pune\\\",\\\"street\\\":\\\"89 Nibm Road\\\",\\\"name\\\":\\\"Rajesh Patil\\\",\\\"accountType\\\":\\\"personal\\\",\\\"state\\\":\\\"Maharashtra\\\",\\\"postal\\\":\\\"59141\\\",\\\"miles\\\":36470}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="input2" format="json">
+      <types:shape format="weave" example="examples/input-2.txt"><![CDATA[%dw 2.0
+
+type input2 = {|
+  accountID: String, 
+  country: String, 
+  creationDate: String, 
+  city: String, 
+  street: String, 
+  name: String, 
+  accountType: String, 
+  state: String, 
+  postal: String, 
+  miles: Number {"typeId": "int"}
+|} {"example": "{\\\"accountID\\\":\\\"4401\\\",\\\"country\\\":\\\"India\\\",\\\"creationDate\\\":\\\"2017-08-22T19:52:42\\\",\\\"city\\\":\\\"Pune\\\",\\\"street\\\":\\\"89 Nibm Road\\\",\\\"name\\\":\\\"Rajesh Patil\\\",\\\"accountType\\\":\\\"personal\\\",\\\"state\\\":\\\"Maharashtra\\\",\\\"postal\\\":\\\"59141\\\",\\\"miles\\\":36470}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#050fe0be-7b9f-47a9-a221-8dd4600830fe">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="input"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="outputformapping"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#c9181378-842e-4812-a0e0-821e8c509ed5">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="input2"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="outputformapping"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
